@@ -1,0 +1,3 @@
+# A simple Car Payment Calculator in Vanilla JS
+
+Created for my car-financing woes...
