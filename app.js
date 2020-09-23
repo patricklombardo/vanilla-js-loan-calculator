@@ -9,7 +9,7 @@ document.querySelector("#loan-form").addEventListener("submit", function (e) {
   // Show loader
   document.querySelector("#loading").style.display = "block";
 
-  setTimeout(calculateResults, 1000);
+  setTimeout(calculateResults, 500);
 });
 
 function calculateResults(e) {
@@ -17,15 +17,23 @@ function calculateResults(e) {
 
   // UI Variables
   const amount = document.querySelector("#amount");
+  const downPayment = document.querySelector("#down-payment");
+  const tradeIn = document.querySelector("#trade-in");
   const interest = document.querySelector("#interest");
-  const years = document.querySelector("#years");
+  const tax = document.querySelector("#tax");
+  const term = document.querySelector("#term");
   const monthlyPayment = document.querySelector("#monthly-payment");
+  const totalFinanced = document.querySelector("#total-financed");
   const totalPayment = document.querySelector("#total-payment");
   const totalInterest = document.querySelector("#total-interest");
 
-  const principal = parseFloat(amount.value);
+  const principal =
+    (parseFloat(amount.value) -
+      parseFloat(downPayment.value || 0) -
+      parseFloat(tradeIn.value || 0)) *
+    (1 + parseFloat(tax.value / 100));
   const calculatedInterest = parseFloat(interest.value) / 100 / 12;
-  const calculatedPayments = parseFloat(years.value) * 12;
+  const calculatedPayments = parseFloat(term.value);
 
   // Compute Monthly Payments
   const x = Math.pow(1 + calculatedInterest, calculatedPayments);
@@ -33,6 +41,7 @@ function calculateResults(e) {
 
   if (isFinite(monthly)) {
     monthlyPayment.value = monthly.toFixed(2);
+    totalFinanced.value = principal.toFixed(2);
     totalPayment.value = (monthly * calculatedPayments).toFixed(2);
     totalInterest.value = (monthly * calculatedPayments - principal).toFixed(2);
 
